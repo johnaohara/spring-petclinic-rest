@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.rest;
 
 import java.io.IOException;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.springframework.samples.petclinic.model.Owner;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -30,9 +31,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
  * @author Vitaliy Fedoriv
  *
  */
-
+@RegisterForReflection
 public class JacksonCustomOwnerDeserializer extends StdDeserializer<Owner> {
-	
+
 	public JacksonCustomOwnerDeserializer(){
 		this(null);
 	}

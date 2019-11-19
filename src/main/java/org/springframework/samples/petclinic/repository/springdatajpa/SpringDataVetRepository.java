@@ -15,18 +15,14 @@
  */
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.repository.VetRepository;
 
 /**
- * Spring Data JPA specialization of the {@link VetRepository} interface
  *
  * @author Michael Isvy
  * @since 15.1.2013
  */
 
-@Profile("spring-data-jpa")
-public interface SpringDataVetRepository extends VetRepository, Repository<Vet, Integer> {
+public interface SpringDataVetRepository extends JpaRepository<Vet, Integer> {
 }

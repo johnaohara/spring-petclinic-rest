@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -36,7 +37,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
  * @author Vitaliy Fedoriv
  *
  */
-
+@RegisterForReflection
 public class JacksonCustomPetDeserializer extends StdDeserializer<Pet> {
 
 	public JacksonCustomPetDeserializer() {

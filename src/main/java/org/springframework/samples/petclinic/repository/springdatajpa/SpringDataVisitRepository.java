@@ -15,18 +15,22 @@
  */
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.VisitRepository;
+
+import java.util.Collection;
 
 /**
- * Spring Data JPA specialization of the {@link VisitRepository} interface
  *
  * @author Michael Isvy
  * @author Vitaliy Fedoriv
  */
 
-@Profile("spring-data-jpa")
-public interface SpringDataVisitRepository extends VisitRepository, Repository<Visit, Integer>, VisitRepositoryOverride {
+public interface SpringDataVisitRepository extends JpaRepository<Visit, Integer> {
+
+    @Query("SELECT visit FROM Visit visit WHERE visit.pet = :petId")
+    public Collection<Visit> findByPetId(@Param("petId") int petId);
+
 }

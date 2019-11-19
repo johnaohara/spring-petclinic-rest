@@ -19,23 +19,20 @@ import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.repository.PetRepository;
 
 /**
- * Spring Data JPA specialization of the {@link PetRepository} interface
  *
  * @author Michael Isvy
  * @author Vitaliy Fedoriv
  */
 
 @Profile("spring-data-jpa")
-public interface SpringDataPetRepository extends PetRepository, Repository<Pet, Integer>, PetRepositoryOverride {
+public interface SpringDataPetRepository extends JpaRepository<Pet, Integer> {
 
-    @Override
     @Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
     List<PetType> findPetTypes() throws DataAccessException;
 }

@@ -15,8 +15,9 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Juergen Hoeller
@@ -26,4 +27,6 @@ import javax.persistence.Table;
 @Table(name = "types")
 public class PetType extends NamedEntity {
 
+    @OneToMany(mappedBy = "type",  cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Pet> pets = new ArrayList<>();
 }
