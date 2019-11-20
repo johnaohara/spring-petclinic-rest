@@ -16,30 +16,7 @@
 
 package org.springframework.samples.petclinic.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.NativeImageTest;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-
-
-/**
- * Test class for {@link PetRestController}
- *
- * @author Vitaliy Fedoriv
- */
 
 @NativeImageTest
 public class PetRestControllerNativeTestsIT extends PetRestControllerTests{

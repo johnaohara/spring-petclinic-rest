@@ -18,17 +18,10 @@ package org.springframework.samples.petclinic.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -41,84 +34,27 @@ import static org.hamcrest.CoreMatchers.is;
  */
 
 @QuarkusTest
-public class PetRestControllerTests {
-
-//    @Autowired
-//    private PetRestController petRestController;
-//
-//    @MockBean
-//    protected ClinicService clinicService;
-//
-//    private MockMvc mockMvc;
-
-    private static List<Pet> pets;
-
-    @BeforeAll
-    public static void initPets(){
-
-    	pets = new ArrayList<Pet>();
-
-    	Owner owner = new Owner();
-    	owner.setId(1);
-    	owner.setFirstName("Eduardo");
-    	owner.setLastName("Rodriquez");
-    	owner.setAddress("2693 Commerce St.");
-    	owner.setCity("McFarland");
-    	owner.setTelephone("6085558763");
-
-    	PetType petType = new PetType();
-    	petType.setId(2);
-    	petType.setName("dog");
-
-    	Pet pet = new Pet();
-    	pet.setId(3);
-    	pet.setName("Rosy");
-    	pet.setBirthDate(new Date());
-    	pet.setOwner(owner);
-    	pet.setType(petType);
-    	pets.add(pet);
-
-    	pet = new Pet();
-    	pet.setId(4);
-    	pet.setName("Jewel");
-    	pet.setBirthDate(new Date());
-    	pet.setOwner(owner);
-    	pet.setType(petType);
-    	pets.add(pet);
-    }
+public class PetRestControllerTests extends TestBase{
 
     @Test
     public void testGetPetSuccess() throws Exception {
-        given()
-            .auth().basic("admin", "adm1n")
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .when().get("/api/pets/3")
-            .then()
+        getRequestSpec()
+            .get("/api/pets/3").then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
             .body("id", is(3),
                 "name", is("Rosy"));
     }
 
-
     @Test
-    //TODO:
     public void testGetPetNotFound() throws Exception {
-        given()
-            .auth().basic("admin", "adm1n")
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .when().get("/api/pets/-1")
-            .then()
+        getRequestSpec().get("/api/pets/-1").then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void testGetAllPetsSuccess() throws Exception {
-        given()
-            .auth().basic("admin", "adm1n")
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .when().get("/api/pets/")
-            .then()
+        getRequestSpec().get("/api/pets/").then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
             .body("[2].id", is(3),
@@ -143,10 +79,7 @@ public class PetRestControllerTests {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().post("/api/pets/")
             .then()
@@ -161,10 +94,7 @@ public class PetRestControllerTests {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().post("/api/pets/")
             .then()
@@ -178,20 +108,15 @@ public class PetRestControllerTests {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().put("/api/pets/3")
             .then()
             .contentType("application/json;charset=UTF-8")
             .statusCode(HttpStatus.NO_CONTENT.value());
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-            .when().get("/api/pets/3")
+        getRequestSpec()
+            .get("/api/pets/3")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
@@ -207,15 +132,11 @@ public class PetRestControllerTests {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .accept(MediaType.APPLICATION_JSON_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().put("/api/pets/3")
             .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
-
      }
 
     @Test
@@ -224,32 +145,23 @@ public class PetRestControllerTests {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .accept(MediaType.APPLICATION_JSON_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().delete("/api/pets/3")
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
-
     }
 
     @Test
-//    @WithMockUser(roles="OWNER_ADMIN")
     public void testDeletePetError() throws Exception {
     	Pet newPet = pets.get(0);
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        given()
-            .auth().basic("admin", "adm1n")
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .accept(MediaType.APPLICATION_JSON_VALUE)
+        postRequestSpec()
             .body(newPetAsJSON)
             .when().delete("/api/pets/-1")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
-
 }
