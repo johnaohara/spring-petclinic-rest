@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.model.Owner;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -164,31 +165,36 @@ public class OwnerRestControllerTests extends TestBase{
     	newOwner.setFirstName("");
     	ObjectMapper mapper = new ObjectMapper();
     	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
-    	this.mockMvc.perform(put("/api/owners/1")
-    		.content(newOwnerAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-        	.andExpect(status().isBadRequest());
+        postRequestSpec()
+            .body(newOwnerAsJSON)
+            .when().put("/api/owners/1")
+            .then()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     public void testDeleteOwnerSuccess() throws Exception {
-//    	Owner newOwner = owners.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
+    	Owner newOwner = owners.get(0);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
 //    	given(this.clinicService.findOwnerById(1)).willReturn(owners.get(0));
-//    	this.mockMvc.perform(delete("/api/owners/1")
-//    		.content(newOwnerAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNoContent());
+        postRequestSpec()
+            .body(newOwnerAsJSON)
+            .when().delete("/api/owners/1")
+            .then()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.NO_CONTENT.value());
+
     }
 
     @Test
     public void testDeleteOwnerError() throws Exception {
-//    	Owner newOwner = owners.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
-//    	given(this.clinicService.findOwnerById(-1)).willReturn(null);
-//    	this.mockMvc.perform(delete("/api/owners/-1")
-//    		.content(newOwnerAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNotFound());
+        postRequestSpec()
+            .when().delete("/api/owners/1-")
+            .then()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
 }

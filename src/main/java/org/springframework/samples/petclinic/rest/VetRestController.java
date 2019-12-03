@@ -18,7 +18,6 @@ package org.springframework.samples.petclinic.rest;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 

@@ -17,67 +17,33 @@
 package org.springframework.samples.petclinic.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+
+import javax.ws.rs.core.MediaType;
+
+import static org.hamcrest.CoreMatchers.is;
 
 
 /**
  * Test class for {@link PetTypeRestController}
  *
- * @author Vitaliy Fedoriv
+ * @author John O'Hara
  */
 @QuarkusTest
-public class PetTypeRestControllerTests {
+public class PetTypeRestControllerTests extends TestBase {
 
-//    @Autowired
-//    private PetTypeRestController petTypeRestController;
-//
-//    @MockBean
-//    private ClinicService clinicService;
-//
-//    private MockMvc mockMvc;
-//
-//    private List<PetType> petTypes;
-
-//    @Before
-    public void initPetTypes(){
-//    	this.mockMvc = MockMvcBuilders.standaloneSetup(petTypeRestController)
-//    			.setControllerAdvice(new ExceptionControllerAdvice())
-//    			.build();
-//    	petTypes = new ArrayList<PetType>();
-//
-//    	PetType petType = new PetType();
-//    	petType.setId(1);
-//    	petType.setName("cat");
-//    	petTypes.add(petType);
-//
-//    	petType = new PetType();
-//    	petType.setId(2);
-//    	petType.setName("dog");
-//    	petTypes.add(petType);
-//
-//    	petType = new PetType();
-//    	petType.setId(3);
-//    	petType.setName("lizard");
-//    	petTypes.add(petType);
-//
-//    	petType = new PetType();
-//    	petType.setId(4);
-//    	petType.setName("snake");
-//    	petTypes.add(petType);
-    }
-
-//    @Test
+    @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
     public void testGetPetTypeSuccessAsOwnerAdmin() throws Exception {
-//    	given(this.clinicService.findPetTypeById(1)).willReturn(petTypes.get(0));
-//        this.mockMvc.perform(get("/api/pettypes/1")
-//        	.accept(MediaType.APPLICATION_JSON_VALUE))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.id").value(1))
-//            .andExpect(jsonPath("$.name").value("cat"));
+        getRequestSpec().get("/api/pettypes/1").then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/json;charset=UTF-8")
+            .body("id", is(1),
+                "name", is("cat"));
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testGetPetTypeSuccessAsVetAdmin() throws Exception {
 //        given(this.clinicService.findPetTypeById(1)).willReturn(petTypes.get(0));
@@ -89,32 +55,32 @@ public class PetTypeRestControllerTests {
 //            .andExpect(jsonPath("$.name").value("cat"));
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
     public void testGetPetTypeNotFound() throws Exception {
+        getRequestSpec().get("/api/pettypes/-1").then()
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .contentType(MediaType.APPLICATION_JSON);
 //    	given(this.clinicService.findPetTypeById(-1)).willReturn(null);
-//        this.mockMvc.perform(get("/api/pettypes/-1")
-//        	.accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isNotFound());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
     public void testGetAllPetTypesSuccessAsOwnerAdmin() throws Exception {
 //    	petTypes.remove(0);
 //    	petTypes.remove(1);
-//    	given(this.clinicService.findAllPetTypes()).willReturn(petTypes);
-//        this.mockMvc.perform(get("/api/pettypes/")
-//        	.accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//        	.andExpect(jsonPath("$.[0].id").value(2))
-//        	.andExpect(jsonPath("$.[0].name").value("dog"))
-//        	.andExpect(jsonPath("$.[1].id").value(4))
-//        	.andExpect(jsonPath("$.[1].name").value("snake"));
+        getRequestSpec().get("/api/pettypes/").then()
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .contentType(MediaType.APPLICATION_JSON)
+            .statusCode(HttpStatus.OK.value())
+            .body("[1].id", is(2),
+                "[1].name", is("dog"),
+                "[3].id", is(4),
+                "[3].name", is("snake"))
+        ;
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testGetAllPetTypesSuccessAsVetAdmin() throws Exception {
 //        petTypes.remove(0);

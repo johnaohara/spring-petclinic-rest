@@ -20,10 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.model.Pet;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 
@@ -34,7 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
  */
 
 @QuarkusTest
-public class PetRestControllerTests extends TestBase{
+public class PetRestControllerTests extends TestBase {
 
     @Test
     public void testGetPetSuccess() throws Exception {
