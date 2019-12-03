@@ -55,7 +55,7 @@ public class VisitRestController {
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Visit>> getAllVisits(){
 		Collection<Visit> visits = new ArrayList<Visit>();
@@ -66,7 +66,7 @@ public class VisitRestController {
 		return new ResponseEntity<Collection<Visit>>(visits, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Visit> getVisit(@PathVariable("visitId") int visitId){
 		Visit visit = this.clinicService.findVisitById(visitId);
@@ -76,7 +76,7 @@ public class VisitRestController {
 		return new ResponseEntity<Visit>(visit, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Visit> addVisit(@RequestBody @Valid Visit visit){
 		HttpHeaders headers = new HttpHeaders();
@@ -85,7 +85,7 @@ public class VisitRestController {
 		return new ResponseEntity<Visit>(visit, headers, HttpStatus.CREATED);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{visitId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Visit> updateVisit(@PathVariable("visitId") int visitId, @RequestBody @Valid Visit visit){
 		Visit currentVisit = this.clinicService.findVisitById(visitId);
@@ -99,7 +99,7 @@ public class VisitRestController {
 		return new ResponseEntity<Visit>(currentVisit, HttpStatus.NO_CONTENT);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{visitId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deleteVisit(@PathVariable("visitId") int visitId){

@@ -49,7 +49,7 @@ public class PetTypeRestController {
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-    @PreAuthorize( "hasAnyRole(@roles.OWNER_ADMIN, @roles.VET_ADMIN)" )
+    @PreAuthorize( "hasAnyRole('OWNER_ADMIN', 'VET_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<PetType>> getAllPetTypes(){
 		Collection<PetType> petTypes = new ArrayList<PetType>();
@@ -60,7 +60,7 @@ public class PetTypeRestController {
 		return new ResponseEntity<Collection<PetType>>(petTypes, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasAnyRole(@roles.OWNER_ADMIN, @roles.VET_ADMIN)" )
+    @PreAuthorize( "hasAnyRole('OWNER_ADMIN', 'VET_ADMIN')" )
 	@RequestMapping(value = "/{petTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<PetType> getPetType(@PathVariable("petTypeId") int petTypeId){
 		PetType petType = this.clinicService.findPetTypeById(petTypeId);
@@ -70,7 +70,7 @@ public class PetTypeRestController {
 		return new ResponseEntity<PetType>(petType, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<PetType> addPetType(@RequestBody @Valid PetType petType){
 		HttpHeaders headers = new HttpHeaders();
@@ -79,7 +79,7 @@ public class PetTypeRestController {
 		return new ResponseEntity<PetType>(petType, headers, HttpStatus.CREATED);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "/{petTypeId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<PetType> updatePetType(@PathVariable("petTypeId") int petTypeId, @RequestBody @Valid PetType petType){
 		PetType currentPetType = this.clinicService.findPetTypeById(petTypeId);
@@ -91,7 +91,7 @@ public class PetTypeRestController {
 		return new ResponseEntity<PetType>(currentPetType, HttpStatus.NO_CONTENT);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "/{petTypeId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deletePetType(@PathVariable("petTypeId") int petTypeId){

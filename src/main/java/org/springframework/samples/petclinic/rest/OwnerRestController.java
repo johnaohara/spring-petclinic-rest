@@ -52,7 +52,7 @@ public class OwnerRestController {
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-	@PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+	@PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/*/lastname/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Owner>> getOwnersList(@PathVariable("lastName") String ownerLastName) {
 		if (ownerLastName == null) {
@@ -65,7 +65,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Collection<Owner>>(owners, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Owner>> getOwners() {
 		Collection<Owner> owners = this.clinicService.findAllOwners();
@@ -75,7 +75,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Collection<Owner>>(owners, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> getOwner(@PathVariable("ownerId") int ownerId) {
 		Owner owner = null;
@@ -86,7 +86,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(owner, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> addOwner(@RequestBody @Valid Owner owner) {
 		HttpHeaders headers = new HttpHeaders();
@@ -95,7 +95,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(owner, headers, HttpStatus.CREATED);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> updateOwner(@PathVariable("ownerId") int ownerId, @RequestBody @Valid Owner owner) {
 		Owner currentOwner = this.clinicService.findOwnerById(ownerId);
@@ -111,7 +111,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(currentOwner, HttpStatus.NO_CONTENT);
 	}
 
-    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
+    @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deleteOwner(@PathVariable("ownerId") int ownerId) {

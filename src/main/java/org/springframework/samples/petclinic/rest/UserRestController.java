@@ -40,7 +40,7 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize( "hasRole(@roles.ADMIN)" )
+    @PreAuthorize( "hasRole('ADMIN')" )
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> addOwner(@RequestBody @Valid User user) throws Exception {
         HttpHeaders headers = new HttpHeaders();

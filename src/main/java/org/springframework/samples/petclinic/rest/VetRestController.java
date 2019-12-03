@@ -54,7 +54,7 @@ public class VetRestController {
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Vet>> getAllVets(){
 		Collection<Vet> vets = new ArrayList<Vet>();
@@ -65,7 +65,7 @@ public class VetRestController {
 		return new ResponseEntity<Collection<Vet>>(vets, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> getVet(@PathVariable("vetId") int vetId){
 		Vet vet = this.clinicService.findVetById(vetId);
@@ -75,7 +75,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(vet, HttpStatus.OK);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> addVet(@RequestBody @Valid Vet vet){
 		HttpHeaders headers = new HttpHeaders();
@@ -84,7 +84,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(vet, headers, HttpStatus.CREATED);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> updateVet(@PathVariable("vetId") int vetId, @RequestBody @Valid Vet vet){
 		Vet currentVet = this.clinicService.findVetById(vetId);
@@ -101,7 +101,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(currentVet, HttpStatus.NO_CONTENT);
 	}
 
-    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
+    @PreAuthorize( "hasRole('VET_ADMIN')" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deleteVet(@PathVariable("vetId") int vetId){
