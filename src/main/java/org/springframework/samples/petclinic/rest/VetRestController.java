@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.service.ClinicService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,12 +50,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class VetRestController {
 
 	@Autowired
-	ClinicService clinicService;
+	private ClinicService clinicService;
 
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-    @RolesAllowed( "VET_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Vet>> getAllVets(){
 		Collection<Vet> vets = new ArrayList<Vet>();
@@ -65,7 +66,7 @@ public class VetRestController {
 		return new ResponseEntity<Collection<Vet>>(vets, HttpStatus.OK);
 	}
 
-    @RolesAllowed( "VET_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> getVet(@PathVariable("vetId") int vetId){
 		Vet vet = this.clinicService.findVetById(vetId);
@@ -75,7 +76,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(vet, HttpStatus.OK);
 	}
 
-    @RolesAllowed( "VET_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> addVet(@RequestBody @Valid Vet vet){
 		HttpHeaders headers = new HttpHeaders();
@@ -84,7 +85,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(vet, headers, HttpStatus.CREATED);
 	}
 
-    @RolesAllowed( "VET_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Vet> updateVet(@PathVariable("vetId") int vetId, @RequestBody @Valid Vet vet){
 		Vet currentVet = this.clinicService.findVetById(vetId);
@@ -101,7 +102,7 @@ public class VetRestController {
 		return new ResponseEntity<Vet>(currentVet, HttpStatus.NO_CONTENT);
 	}
 
-    @RolesAllowed( "VET_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.VET_ADMIN)" )
 	@RequestMapping(value = "/{vetId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deleteVet(@PathVariable("vetId") int vetId){

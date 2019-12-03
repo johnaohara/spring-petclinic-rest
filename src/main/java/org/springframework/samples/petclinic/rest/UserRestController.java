@@ -16,7 +16,6 @@
 
 package org.springframework.samples.petclinic.rest;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @RolesAllowed( "ADMIN" )
+    @PreAuthorize( "hasRole(@roles.ADMIN)" )
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> addOwner(@RequestBody @Valid User user) throws Exception {
         HttpHeaders headers = new HttpHeaders();

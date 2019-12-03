@@ -16,13 +16,6 @@
 
 package org.springframework.samples.petclinic.rest;
 
-import java.util.Collection;
-
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.service.ClinicService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +31,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.Collection;
 
 /**
  * @author Vitaliy Fedoriv
@@ -49,12 +47,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OwnerRestController {
 
 	@Autowired
-	ClinicService clinicService;
+	private ClinicService clinicService;
 
 	@Autowired
     UriComponentsBuilder ucBuilder;
 
-	@RolesAllowed( "OWNER_ADMIN" )
+	@PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "/*/lastname/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Owner>> getOwnersList(@PathVariable("lastName") String ownerLastName) {
 		if (ownerLastName == null) {
@@ -67,7 +65,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Collection<Owner>>(owners, HttpStatus.OK);
 	}
 
-    @RolesAllowed( "OWNER_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Collection<Owner>> getOwners() {
 		Collection<Owner> owners = this.clinicService.findAllOwners();
@@ -77,7 +75,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Collection<Owner>>(owners, HttpStatus.OK);
 	}
 
-    @RolesAllowed( "OWNER_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> getOwner(@PathVariable("ownerId") int ownerId) {
 		Owner owner = null;
@@ -88,7 +86,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(owner, HttpStatus.OK);
 	}
 
-    @RolesAllowed( "OWNER_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> addOwner(@RequestBody @Valid Owner owner) {
 		HttpHeaders headers = new HttpHeaders();
@@ -97,7 +95,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(owner, headers, HttpStatus.CREATED);
 	}
 
-    @RolesAllowed( "OWNER_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Owner> updateOwner(@PathVariable("ownerId") int ownerId, @RequestBody @Valid Owner owner) {
 		Owner currentOwner = this.clinicService.findOwnerById(ownerId);
@@ -113,7 +111,7 @@ public class OwnerRestController {
 		return new ResponseEntity<Owner>(currentOwner, HttpStatus.NO_CONTENT);
 	}
 
-    @RolesAllowed( "OWNER_ADMIN" )
+    @PreAuthorize( "hasRole(@roles.OWNER_ADMIN)" )
 	@RequestMapping(value = "/{ownerId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Transactional
 	public ResponseEntity<Void> deleteOwner(@PathVariable("ownerId") int ownerId) {

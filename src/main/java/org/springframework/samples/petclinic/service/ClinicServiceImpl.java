@@ -29,7 +29,12 @@ import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.springdatajpa.*;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataOwnerRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataPetRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataPetTypeRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataSpecialtyRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataVetRepository;
+import org.springframework.samples.petclinic.repository.springdatajpa.SpringDataVisitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
