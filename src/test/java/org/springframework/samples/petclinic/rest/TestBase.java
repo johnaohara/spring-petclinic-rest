@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.given;
 
 public abstract class TestBase {
 
-    static  RequestSpecification getRequestSpec(){
+    static  RequestSpecification retrievalRequestSpec(){
         return given()
             .auth().basic("admin", "adm1n")
             .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -23,7 +23,7 @@ public abstract class TestBase {
     }
 
 
-    static RequestSpecification postRequestSpec(){
+    static RequestSpecification modificationRequestSpec(){
         return given()
             .auth().basic("admin", "adm1n")
             .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 the original author or authors.
+ * Copyright 2016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Visit;
+package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.PetType;
+
 /**
- *
- * @author Michael Isvy
  * @author Vitaliy Fedoriv
+ *
  */
 
-public interface SpringDataVisitRepository extends JpaRepository<Visit, Integer> {
+public interface PetTypeRepository {
+	
+	PetType findById(int id) throws DataAccessException;
+	
+	Collection<PetType> findAll() throws DataAccessException;
 
-    @Query("SELECT visit FROM Visit visit WHERE visit.pet = :petId")
-    public Collection<Visit> findByPetId(@Param("petId") int petId);
+	void save(PetType petType) throws DataAccessException;
+	
+	void delete(PetType petType) throws DataAccessException;
 
 }

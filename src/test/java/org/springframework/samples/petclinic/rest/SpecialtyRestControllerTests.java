@@ -16,7 +16,17 @@
 
 package org.springframework.samples.petclinic.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.samples.petclinic.model.Specialty;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * Test class for {@link SpecialtyRestController}
@@ -24,76 +34,62 @@ import io.quarkus.test.junit.QuarkusTest;
  * @author Vitaliy Fedoriv
  */
 @QuarkusTest
-public class SpecialtyRestControllerTests {
-//
-//    @Autowired
-//    private SpecialtyRestController specialtyRestController;
-//
-//	@MockBean
-//    private ClinicService clinicService;
-//
-//    private MockMvc mockMvc;
-//
-//    private List<Specialty> specialties;
+public class SpecialtyRestControllerTests extends TestBase {
+    private static List<Specialty> specialties;
 
-//    @Before
-    public void initSpecialtys(){
-//    	this.mockMvc = MockMvcBuilders.standaloneSetup(specialtyRestController)
-//    			.setControllerAdvice(new ExceptionControllerAdvice())
-//    			.build();
-//    	specialties = new ArrayList<Specialty>();
-//
-//    	Specialty specialty = new Specialty();
-//    	specialty.setId(1);
-//    	specialty.setName("radiology");
-//    	specialties.add(specialty);
-//
-//    	specialty = new Specialty();
-//    	specialty.setId(2);
-//    	specialty.setName("surgery");
-//    	specialties.add(specialty);
-//
-//    	specialty = new Specialty();
-//    	specialty.setId(3);
-//    	specialty.setName("dentistry");
-//    	specialties.add(specialty);
-//
+    @BeforeAll
+    public static void initSpecialtys(){
+    	specialties = new ArrayList<Specialty>();
+
+    	Specialty specialty = new Specialty();
+    	specialty.setId(1);
+    	specialty.setName("radiology");
+    	specialties.add(specialty);
+
+    	specialty = new Specialty();
+    	specialty.setId(2);
+    	specialty.setName("surgery");
+    	specialties.add(specialty);
+
+    	specialty = new Specialty();
+    	specialty.setId(3);
+    	specialty.setName("dentistry");
+    	specialties.add(specialty);
+
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testGetSpecialtySuccess() throws Exception {
-//    	given(this.clinicService.findSpecialtyById(1)).willReturn(specialties.get(0));
-//        this.mockMvc.perform(get("/api/specialties/1")
-//        	.accept(MediaType.APPLICATION_JSON_VALUE))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.id").value(1))
-//            .andExpect(jsonPath("$.name").value("radiology"));
+        retrievalRequestSpec()
+            .get("/api/specialties/1").then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/json;charset=UTF-8")
+            .body("id", is(1),
+                "name", is("radiology"));
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testGetSpecialtyNotFound() throws Exception {
-//    	given(this.clinicService.findSpecialtyById(-1)).willReturn(null);
-//        this.mockMvc.perform(get("/api/specialties/-1")
-//        	.accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isNotFound());
+        retrievalRequestSpec()
+            .get("/api/specialties/1").then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testGetAllSpecialtysSuccess() throws Exception {
 //    	specialties.remove(0);
-//    	given(this.clinicService.findAllSpecialties()).willReturn(specialties);
-//        this.mockMvc.perform(get("/api/specialties/")
-//        	.accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//        	.andExpect(jsonPath("$.[0].id").value(2))
-//        	.andExpect(jsonPath("$.[0].name").value("surgery"))
-//        	.andExpect(jsonPath("$.[1].id").value(3))
-//        	.andExpect(jsonPath("$.[1].name").value("dentistry"));
+        retrievalRequestSpec()
+            .get("/api/specialties/").then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/json;charset=UTF-8")
+            .body("[1].id", is(2),
+                "[1].name", is("surgery"),
+                "[2].id", is(3),
+                "[2].name", is("dentistry"));
+
     }
 
 //    @Test
@@ -106,85 +102,103 @@ public class SpecialtyRestControllerTests {
 //            .andExpect(status().isNotFound());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testCreateSpecialtySuccess() throws Exception {
-//    	Specialty newSpecialty = specialties.get(0);
-//    	newSpecialty.setId(999);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	this.mockMvc.perform(post("/api/specialties/")
-//    		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//    		.andExpect(status().isCreated());
+    	Specialty newSpecialty = specialties.get(0);
+    	newSpecialty.setId(999);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+        modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().post("/api/specialties/")
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testCreateSpecialtyError() throws Exception {
-//    	Specialty newSpecialty = specialties.get(0);
-//    	newSpecialty.setId(null);
-//    	newSpecialty.setName(null);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	this.mockMvc.perform(post("/api/specialties/")
-//        		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        		.andExpect(status().isBadRequest());
+    	Specialty newSpecialty = specialties.get(0);
+    	newSpecialty.setId(null);
+    	newSpecialty.setName(null);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+    	modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().post("/api/specialties/")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
      }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testUpdateSpecialtySuccess() throws Exception {
 //    	given(this.clinicService.findSpecialtyById(2)).willReturn(specialties.get(1));
-//    	Specialty newSpecialty = specialties.get(1);
-//    	newSpecialty.setName("surgery I");
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	this.mockMvc.perform(put("/api/specialties/2")
-//    		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(content().contentType("application/json;charset=UTF-8"))
-//        	.andExpect(status().isNoContent());
-//
-//    	this.mockMvc.perform(get("/api/specialties/2")
-//           	.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON_VALUE))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.id").value(2))
-//            .andExpect(jsonPath("$.name").value("surgery I"));
+    	Specialty newSpecialty = specialties.get(1);
+    	newSpecialty.setName("surgery I");
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+        modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().put("/api/specialties/2")
+            .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+
+
+        retrievalRequestSpec()
+            .when().get("/api/specialties/2")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/json;charset=UTF-8")
+            .body("id", is(2),
+                "name", is("surgery I"));
+
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testUpdateSpecialtyError() throws Exception {
-//    	Specialty newSpecialty = specialties.get(0);
-//    	newSpecialty.setName("");
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	this.mockMvc.perform(put("/api/specialties/1")
-//    		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isBadRequest());
+    	Specialty newSpecialty = specialties.get(0);
+    	newSpecialty.setName("");
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+        modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().put("/api/specialties/1")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
      }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testDeleteSpecialtySuccess() throws Exception {
-//    	Specialty newSpecialty = specialties.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	given(this.clinicService.findSpecialtyById(1)).willReturn(specialties.get(0));
-//    	this.mockMvc.perform(delete("/api/specialties/1")
-//    		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNoContent());
+    	Specialty newSpecialty = specialties.get(0);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+        modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().delete("/api/specialties/1")
+            .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testDeleteSpecialtyError() throws Exception {
-//    	Specialty newSpecialty = specialties.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
-//    	given(this.clinicService.findSpecialtyById(-1)).willReturn(null);
-//    	this.mockMvc.perform(delete("/api/specialties/-1")
-//    		.content(newSpecialtyAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNotFound());
+    	Specialty newSpecialty = specialties.get(0);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newSpecialtyAsJSON = mapper.writeValueAsString(newSpecialty);
+
+        modificationRequestSpec()
+            .body(newSpecialtyAsJSON)
+            .when().delete("/api/specialties/-1")
+            .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
     }
 }

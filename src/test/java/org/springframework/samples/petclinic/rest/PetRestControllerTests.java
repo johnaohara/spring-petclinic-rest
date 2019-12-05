@@ -36,7 +36,7 @@ public class PetRestControllerTests extends TestBase {
 
     @Test
     public void testGetPetSuccess() throws Exception {
-        getRequestSpec()
+        retrievalRequestSpec()
             .get("/api/pets/3").then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
@@ -46,13 +46,13 @@ public class PetRestControllerTests extends TestBase {
 
     @Test
     public void testGetPetNotFound() throws Exception {
-        getRequestSpec().get("/api/pets/-1").then()
+        retrievalRequestSpec().get("/api/pets/-1").then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void testGetAllPetsSuccess() throws Exception {
-        getRequestSpec().get("/api/pets/").then()
+        retrievalRequestSpec().get("/api/pets/").then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
             .body("[2].id", is(3),
@@ -77,7 +77,7 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().post("/api/pets/")
             .then()
@@ -92,7 +92,7 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().post("/api/pets/")
             .then()
@@ -106,14 +106,14 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().put("/api/pets/3")
             .then()
             .contentType("application/json;charset=UTF-8")
             .statusCode(HttpStatus.NO_CONTENT.value());
 
-        getRequestSpec()
+        retrievalRequestSpec()
             .get("/api/pets/3")
             .then()
             .statusCode(HttpStatus.OK.value())
@@ -130,7 +130,7 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().put("/api/pets/3")
             .then()
@@ -143,7 +143,7 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().delete("/api/pets/3")
             .then()
@@ -156,7 +156,7 @@ public class PetRestControllerTests extends TestBase {
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetAsJSON = mapper.writeValueAsString(newPet);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newPetAsJSON)
             .when().delete("/api/pets/-1")
             .then()

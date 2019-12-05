@@ -14,32 +14,67 @@
  * limitations under the License.
  */
 
-package org.springframework.samples.petclinic.repository.springdatajpa;
+package org.springframework.samples.petclinic.repository.jpa;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.PetTypeRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Vitaliy Fedoriv
  *
  */
 
-public class SpringDataPetTypeRepositoryImpl implements PetTypeRepositoryOverride {
+@Repository
+@Profile("jpa")
+@Default
+public class JpaPetTypeRepositoryImpl implements PetTypeRepository {
 
-	@PersistenceContext
+    @PersistenceContext
     private EntityManager em;
+
+	@Override
+    @Transactional()
+	public PetType findById(int id) {
+		return this.em.find(PetType.class, id);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void delete(PetType petType) {
-        this.em.remove(this.em.contains(petType) ? petType : this.em.merge(petType));
+    @Transactional()
+	public Collection<PetType> findAll() throws DataAccessException {
+		return this.em.createQuery("SELECT ptype FROM PetType ptype").getResultList();
+	}
+
+	@Override
+    @Transactional()
+	public void save(PetType petType) throws DataAccessException {
+		if (petType.getId() == null) {
+            this.em.persist(petType);
+        } else {
+            this.em.merge(petType);
+        }
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+    @Transactional()
+	public void delete(PetType petType) throws DataAccessException {
+		this.em.remove(this.em.contains(petType) ? petType : this.em.merge(petType));
 		Integer petTypeId = petType.getId();
 
 		List<Pet> pets = this.em.createQuery("SELECT pet FROM Pet pet WHERE type_id=" + petTypeId).getResultList();

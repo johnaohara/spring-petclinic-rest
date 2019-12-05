@@ -36,7 +36,7 @@ public class OwnerRestControllerTests extends TestBase{
 
     @Test
     public void testGetOwnerSuccess() throws Exception {
-        getRequestSpec().get("/api/owners/1")
+        retrievalRequestSpec().get("/api/owners/1")
             .then()
             .statusCode(200)
             .contentType("application/json;charset=UTF-8")
@@ -45,14 +45,14 @@ public class OwnerRestControllerTests extends TestBase{
 
     @Test
     public void testGetOwnerNotFound() throws Exception {
-        getRequestSpec().get("/api/owners/-1")
+        retrievalRequestSpec().get("/api/owners/-1")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void testGetOwnersListSuccess() throws Exception {
-        getRequestSpec().get("/api/owners/*/lastname/Davis")
+        retrievalRequestSpec().get("/api/owners/*/lastname/Davis")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
@@ -65,7 +65,7 @@ public class OwnerRestControllerTests extends TestBase{
 
     @Test
     public void testGetOwnersListNotFound() throws Exception {
-        getRequestSpec().get("/api/owners/*/lastname/Smith")
+        retrievalRequestSpec().get("/api/owners/*/lastname/Smith")
             .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
 
@@ -74,7 +74,7 @@ public class OwnerRestControllerTests extends TestBase{
     @Test
     public void testGetAllOwnersSuccess() throws Exception {
 
-        getRequestSpec().get("/api/owners/")
+        retrievalRequestSpec().get("/api/owners/")
             .then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
@@ -112,7 +112,7 @@ public class OwnerRestControllerTests extends TestBase{
     	ObjectMapper mapper = new ObjectMapper();
     	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newOwnerAsJSON)
             .when().post("/api/owners/")
             .then()
@@ -128,7 +128,7 @@ public class OwnerRestControllerTests extends TestBase{
         ObjectMapper mapper = new ObjectMapper();
         String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newOwnerAsJSON)
             .when().post("/api/owners/")
             .then()
@@ -143,14 +143,14 @@ public class OwnerRestControllerTests extends TestBase{
     	ObjectMapper mapper = new ObjectMapper();
     	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newOwnerAsJSON)
             .when().put("/api/owners/1")
             .then()
             .contentType("application/json;charset=UTF-8")
             .statusCode(HttpStatus.NO_CONTENT.value());
 
-        getRequestSpec()
+        retrievalRequestSpec()
             .get("/api/owners/1")
             .then()
             .statusCode(HttpStatus.OK.value())
@@ -165,11 +165,10 @@ public class OwnerRestControllerTests extends TestBase{
     	newOwner.setFirstName("");
     	ObjectMapper mapper = new ObjectMapper();
     	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newOwnerAsJSON)
             .when().put("/api/owners/1")
             .then()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
@@ -179,19 +178,18 @@ public class OwnerRestControllerTests extends TestBase{
     	ObjectMapper mapper = new ObjectMapper();
     	String newOwnerAsJSON = mapper.writeValueAsString(newOwner);
 //    	given(this.clinicService.findOwnerById(1)).willReturn(owners.get(0));
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newOwnerAsJSON)
             .when().delete("/api/owners/1")
             .then()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .statusCode(HttpStatus.NO_CONTENT.value());
 
     }
 
     @Test
     public void testDeleteOwnerError() throws Exception {
-        postRequestSpec()
-            .when().delete("/api/owners/1-")
+        modificationRequestSpec()
+            .when().delete("/api/owners/-1")
             .then()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .statusCode(HttpStatus.NOT_FOUND.value());

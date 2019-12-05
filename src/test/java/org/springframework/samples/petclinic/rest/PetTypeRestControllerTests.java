@@ -16,9 +16,11 @@
 
 package org.springframework.samples.petclinic.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.samples.petclinic.model.PetType;
 
 import javax.ws.rs.core.MediaType;
 
@@ -36,7 +38,7 @@ public class PetTypeRestControllerTests extends TestBase {
     @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
     public void testGetPetTypeSuccessAsOwnerAdmin() throws Exception {
-        getRequestSpec().get("/api/pettypes/1").then()
+        retrievalRequestSpec().get("/api/pettypes/1").then()
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
             .body("id", is(1),
@@ -58,9 +60,8 @@ public class PetTypeRestControllerTests extends TestBase {
     @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
     public void testGetPetTypeNotFound() throws Exception {
-        getRequestSpec().get("/api/pettypes/-1").then()
-            .statusCode(HttpStatus.NOT_FOUND.value())
-            .contentType(MediaType.APPLICATION_JSON);
+        retrievalRequestSpec().get("/api/pettypes/-1").then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
 //    	given(this.clinicService.findPetTypeById(-1)).willReturn(null);
     }
 
@@ -69,7 +70,7 @@ public class PetTypeRestControllerTests extends TestBase {
     public void testGetAllPetTypesSuccessAsOwnerAdmin() throws Exception {
 //    	petTypes.remove(0);
 //    	petTypes.remove(1);
-        getRequestSpec().get("/api/pettypes/").then()
+        retrievalRequestSpec().get("/api/pettypes/").then()
             .statusCode(HttpStatus.NOT_FOUND.value())
             .contentType(MediaType.APPLICATION_JSON)
             .statusCode(HttpStatus.OK.value())
@@ -80,9 +81,9 @@ public class PetTypeRestControllerTests extends TestBase {
         ;
     }
 
-    @Test
+//    @Test
 //    @WithMockUser(roles="VET_ADMIN")
-    public void testGetAllPetTypesSuccessAsVetAdmin() throws Exception {
+//    public void testGetAllPetTypesSuccessAsVetAdmin() throws Exception {
 //        petTypes.remove(0);
 //        petTypes.remove(1);
 //        given(this.clinicService.findAllPetTypes()).willReturn(petTypes);
@@ -94,7 +95,7 @@ public class PetTypeRestControllerTests extends TestBase {
 //            .andExpect(jsonPath("$.[0].name").value("dog"))
 //            .andExpect(jsonPath("$.[1].id").value(4))
 //            .andExpect(jsonPath("$.[1].name").value("snake"));
-    }
+//    }
 
 //    @Test
 //    @WithMockUser(roles="VET_ADMIN")
@@ -106,39 +107,39 @@ public class PetTypeRestControllerTests extends TestBase {
 //            .andExpect(status().isNotFound());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testCreatePetTypeSuccess() throws Exception {
-//    	PetType newPetType = petTypes.get(0);
-//    	newPetType.setId(999);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(0);
+    	newPetType.setId(999);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	this.mockMvc.perform(post("/api/pettypes/")
 //    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
 //    		.andExpect(status().isCreated());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testCreatePetTypeError() throws Exception {
-//    	PetType newPetType = petTypes.get(0);
-//    	newPetType.setId(null);
-//    	newPetType.setName(null);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(0);
+    	newPetType.setId(null);
+    	newPetType.setName(null);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	this.mockMvc.perform(post("/api/pettypes/")
 //        		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
 //        		.andExpect(status().isBadRequest());
      }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testUpdatePetTypeSuccess() throws Exception {
 //    	given(this.clinicService.findPetTypeById(2)).willReturn(petTypes.get(1));
-//    	PetType newPetType = petTypes.get(1);
-//    	newPetType.setName("dog I");
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(1);
+    	newPetType.setName("dog I");
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	this.mockMvc.perform(put("/api/pettypes/2")
 //    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
 //        	.andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -152,36 +153,36 @@ public class PetTypeRestControllerTests extends TestBase {
 //            .andExpect(jsonPath("$.name").value("dog I"));
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testUpdatePetTypeError() throws Exception {
-//    	PetType newPetType = petTypes.get(0);
-//    	newPetType.setName("");
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(0);
+    	newPetType.setName("");
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	this.mockMvc.perform(put("/api/pettypes/1")
 //    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
 //        	.andExpect(status().isBadRequest());
      }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testDeletePetTypeSuccess() throws Exception {
-//    	PetType newPetType = petTypes.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(0);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	given(this.clinicService.findPetTypeById(1)).willReturn(petTypes.get(0));
 //    	this.mockMvc.perform(delete("/api/pettypes/1")
 //    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
 //        	.andExpect(status().isNoContent());
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
     public void testDeletePetTypeError() throws Exception {
-//    	PetType newPetType = petTypes.get(0);
-//    	ObjectMapper mapper = new ObjectMapper();
-//    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
+    	PetType newPetType = petTypes.get(0);
+    	ObjectMapper mapper = new ObjectMapper();
+    	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
 //    	given(this.clinicService.findPetTypeById(-1)).willReturn(null);
 //    	this.mockMvc.perform(delete("/api/pettypes/-1")
 //    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))

@@ -19,7 +19,7 @@ public class UserRestControllerTests extends TestBase {
         ObjectMapper mapper = new ObjectMapper();
         String newUserAsJson = mapper.writeValueAsString(user);
 
-        postRequestSpec()
+        modificationRequestSpec()
             .body(newUserAsJson)
             .when().put("/api/users/")
             .then()
@@ -28,14 +28,17 @@ public class UserRestControllerTests extends TestBase {
 
     @Test
     public void testCreateUserError() throws Exception {
-//        User user = new User();
-//        user.setUsername("username");
-//        user.setPassword("password");
-//        user.setEnabled(true);
-//        ObjectMapper mapper = new ObjectMapper();
-//        String newVetAsJSON = mapper.writeValueAsString(user);
-//        this.mockMvc.perform(post("/api/users/")
-//            .content(newVetAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//            .andExpect(status().isBadRequest());
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword("password");
+        user.setEnabled(true);
+        ObjectMapper mapper = new ObjectMapper();
+        String newUserAsJSON = mapper.writeValueAsString(user);
+
+        modificationRequestSpec()
+            .body(newUserAsJSON)
+            .when().put("/api/users/")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 }
