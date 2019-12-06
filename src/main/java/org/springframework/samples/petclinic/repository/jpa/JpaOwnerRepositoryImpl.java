@@ -17,7 +17,6 @@ package org.springframework.samples.petclinic.repository.jpa;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -41,7 +40,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Profile("jpa")
-@Default
 public class JpaOwnerRepositoryImpl implements OwnerRepository {
 
     @PersistenceContext

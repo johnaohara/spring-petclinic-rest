@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.repository.jpa;
 
-import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Profile("jpa")
-@Default
 public class JpaUserRepositoryImpl implements UserRepository {
 
     @PersistenceContext
