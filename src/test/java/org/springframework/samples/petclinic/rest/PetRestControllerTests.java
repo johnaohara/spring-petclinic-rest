@@ -145,7 +145,7 @@ public class PetRestControllerTests extends TestBase {
 
         modificationRequestSpec()
             .body(newPetAsJSON)
-            .when().delete("/api/pets/3")
+            .when().delete("/api/pets/5")
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }

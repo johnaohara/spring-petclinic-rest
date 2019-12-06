@@ -33,6 +33,7 @@ public abstract class TestBase {
 
     static List<Pet> pets;
     static List<Owner> owners;
+    static List<PetType> petTypes;
 
     @BeforeAll
     public static void initPets(){
@@ -75,8 +76,6 @@ public abstract class TestBase {
         owner.setTelephone("6085553198");
         owners.add(owner);
 
-
-
         pets = new ArrayList<Pet>();
 
         PetType petType = new PetType();
@@ -98,6 +97,28 @@ public abstract class TestBase {
         pet.setOwner(owner);
         pet.setType(petType);
         pets.add(pet);
+
+        petTypes = new ArrayList<PetType>();
+
+        petType = new PetType();
+        petType.setId(1);
+        petType.setName("cat");
+        petTypes.add(petType);
+
+        petType = new PetType();
+        petType.setId(2);
+        petType.setName("dog");
+        petTypes.add(petType);
+
+        petType = new PetType();
+        petType.setId(3);
+        petType.setName("lizard");
+        petTypes.add(petType);
+
+        petType = new PetType();
+        petType.setId(4);
+        petType.setName("snake");
+        petTypes.add(petType);
 
     }
 

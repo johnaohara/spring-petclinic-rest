@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.rest;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -80,7 +81,8 @@ public class SpecialtyRestController {
 	public ResponseEntity<Specialty> addSpecialty(@RequestBody @Valid Specialty specialty){
 		HttpHeaders headers = new HttpHeaders();
 		this.clinicService.saveSpecialty(specialty);
-		headers.setLocation(ucBuilder.path("/api/specialtys/{id}").buildAndExpand(specialty.getId()).toUri());
+		URI location  = ucBuilder.path("/api/specialtys/{id}").buildAndExpand(specialty.getId()).toUri();
+		headers.setLocation(location);
 		return new ResponseEntity<Specialty>(specialty, headers, HttpStatus.CREATED);
 	}
 

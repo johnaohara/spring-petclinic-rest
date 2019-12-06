@@ -35,6 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -84,7 +85,8 @@ public class PetRestController {
 	public ResponseEntity<Pet> addPet(@RequestBody @Valid Pet pet){
 		HttpHeaders headers = new HttpHeaders();
 		this.clinicService.savePet(pet);
-		headers.setLocation(ucBuilder.path("/api/pets/{id}").buildAndExpand(pet.getId()).toUri());
+		URI location = ucBuilder.path("/api/pets/{id}").buildAndExpand(pet.getId()).toUri();
+		headers.setLocation(location);
 		return new ResponseEntity<Pet>(pet, headers, HttpStatus.CREATED);
 	}
 

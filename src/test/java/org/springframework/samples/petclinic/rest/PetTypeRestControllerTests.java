@@ -18,11 +18,15 @@ package org.springframework.samples.petclinic.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.model.PetType;
 
 import javax.ws.rs.core.MediaType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -34,6 +38,8 @@ import static org.hamcrest.CoreMatchers.is;
  */
 @QuarkusTest
 public class PetTypeRestControllerTests extends TestBase {
+
+
 
     @Test
 //    @WithMockUser(roles="OWNER_ADMIN")
@@ -81,21 +87,20 @@ public class PetTypeRestControllerTests extends TestBase {
         ;
     }
 
-//    @Test
+    @Test
 //    @WithMockUser(roles="VET_ADMIN")
-//    public void testGetAllPetTypesSuccessAsVetAdmin() throws Exception {
-//        petTypes.remove(0);
-//        petTypes.remove(1);
-//        given(this.clinicService.findAllPetTypes()).willReturn(petTypes);
-//        this.mockMvc.perform(get("/api/pettypes/")
-//            .accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.[0].id").value(2))
-//            .andExpect(jsonPath("$.[0].name").value("dog"))
-//            .andExpect(jsonPath("$.[1].id").value(4))
-//            .andExpect(jsonPath("$.[1].name").value("snake"));
-//    }
+    public void testGetAllPetTypesSuccessAsVetAdmin() throws Exception {
+
+
+        retrievalRequestSpec().get("/api/pettypes/").then()
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .contentType(MediaType.APPLICATION_JSON)
+            .statusCode(HttpStatus.OK.value())
+            .body("[1].id", is(2),
+                "[1].name", is("dog"),
+                "[3].id", is(4),
+                "[3].name", is("snake"));
+    }
 
 //    @Test
 //    @WithMockUser(roles="VET_ADMIN")
@@ -114,9 +119,13 @@ public class PetTypeRestControllerTests extends TestBase {
     	newPetType.setId(999);
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	this.mockMvc.perform(post("/api/pettypes/")
-//    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//    		.andExpect(status().isCreated());
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().post("/api/pettypes/")
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
+
     }
 
     @Test
@@ -127,9 +136,13 @@ public class PetTypeRestControllerTests extends TestBase {
     	newPetType.setName(null);
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	this.mockMvc.perform(post("/api/pettypes/")
-//        		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        		.andExpect(status().isBadRequest());
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().post("/api/pettypes/")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+
      }
 
     @Test
@@ -140,17 +153,21 @@ public class PetTypeRestControllerTests extends TestBase {
     	newPetType.setName("dog I");
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	this.mockMvc.perform(put("/api/pettypes/2")
-//    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(content().contentType("application/json;charset=UTF-8"))
-//        	.andExpect(status().isNoContent());
-//
-//    	this.mockMvc.perform(get("/api/pettypes/2")
-//           	.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON_VALUE))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.id").value(2))
-//            .andExpect(jsonPath("$.name").value("dog I"));
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().put("/api/pettypes/2")
+            .then()
+            .contentType("application/json;charset=UTF-8")
+            .statusCode(HttpStatus.NO_CONTENT.value());
+
+        retrievalRequestSpec()
+            .get("/api/pets/2")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/json;charset=UTF-8")
+            .body("id", is(2),
+                "name", is("dog I"));
     }
 
     @Test
@@ -160,9 +177,14 @@ public class PetTypeRestControllerTests extends TestBase {
     	newPetType.setName("");
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	this.mockMvc.perform(put("/api/pettypes/1")
-//    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isBadRequest());
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().put("/api/pettypes/1")
+            .then()
+            .contentType("application/json;charset=UTF-8")
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+
      }
 
     @Test
@@ -171,10 +193,13 @@ public class PetTypeRestControllerTests extends TestBase {
     	PetType newPetType = petTypes.get(0);
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	given(this.clinicService.findPetTypeById(1)).willReturn(petTypes.get(0));
-//    	this.mockMvc.perform(delete("/api/pettypes/1")
-//    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNoContent());
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().delete("/api/pettypes/1")
+            .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+
     }
 
     @Test
@@ -183,10 +208,13 @@ public class PetTypeRestControllerTests extends TestBase {
     	PetType newPetType = petTypes.get(0);
     	ObjectMapper mapper = new ObjectMapper();
     	String newPetTypeAsJSON = mapper.writeValueAsString(newPetType);
-//    	given(this.clinicService.findPetTypeById(-1)).willReturn(null);
-//    	this.mockMvc.perform(delete("/api/pettypes/-1")
-//    		.content(newPetTypeAsJSON).accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE))
-//        	.andExpect(status().isNotFound());
+
+        modificationRequestSpec()
+            .body(newPetTypeAsJSON)
+            .when().delete("/api/pettypes/-1")
+            .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+
     }
 
 }

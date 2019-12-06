@@ -83,17 +83,7 @@ public class OwnerRestControllerTests extends TestBase{
                 ".[1].id", is(4),
                 ".[1].firstName", is("Harold")
             );;
-        //    	owners.remove(0);
-//    	owners.remove(1);
-//    	given(this.clinicService.findAllOwners()).willReturn(owners);
-//        this.mockMvc.perform(get("/api/owners/")
-//        	.accept(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType("application/json;charset=UTF-8"))
-//            .andExpect(jsonPath("$.[0].id").value(2))
-//            .andExpect(jsonPath("$.[0].firstName").value("Betty"))
-//            .andExpect(jsonPath("$.[1].id").value(4))
-//            .andExpect(jsonPath("$.[1].firstName").value("Harold"));
+
     }
 
     @Test

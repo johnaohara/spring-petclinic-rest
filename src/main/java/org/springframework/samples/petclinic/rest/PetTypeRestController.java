@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.rest;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -75,7 +76,8 @@ public class PetTypeRestController {
 	public ResponseEntity<PetType> addPetType(@RequestBody @Valid PetType petType){
 		HttpHeaders headers = new HttpHeaders();
 		this.clinicService.savePetType(petType);
-		headers.setLocation(ucBuilder.path("/api/pettypes/{id}").buildAndExpand(petType.getId()).toUri());
+		URI location = ucBuilder.path("/api/pettypes/{id}").buildAndExpand(petType.getId()).toUri();
+		headers.setLocation(location);
 		return new ResponseEntity<PetType>(petType, headers, HttpStatus.CREATED);
 	}
 

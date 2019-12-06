@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 
 /**
  * Test class for {@link SpecialtyRestController}
@@ -66,7 +67,7 @@ public class SpecialtyRestControllerTests extends TestBase {
             .statusCode(HttpStatus.OK.value())
             .contentType("application/json;charset=UTF-8")
             .body("id", is(1),
-                "name", is("radiology"));
+                "name", startsWith("radiology"));
     }
 
     @Test
@@ -183,7 +184,7 @@ public class SpecialtyRestControllerTests extends TestBase {
 
         modificationRequestSpec()
             .body(newSpecialtyAsJSON)
-            .when().delete("/api/specialties/1")
+            .when().delete("/api/specialties/5")
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }

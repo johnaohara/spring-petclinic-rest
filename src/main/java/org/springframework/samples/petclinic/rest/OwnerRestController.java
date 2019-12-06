@@ -34,6 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -91,7 +92,8 @@ public class OwnerRestController {
 	public ResponseEntity<Owner> addOwner(@RequestBody @Valid Owner owner) {
 		HttpHeaders headers = new HttpHeaders();
 		this.clinicService.saveOwner(owner);
-		headers.setLocation(ucBuilder.path("/api/owners/{id}").buildAndExpand(owner.getId()).toUri());
+		URI location = ucBuilder.path("/api/owners/{id}").buildAndExpand(owner.getId()).toUri();
+		headers.setLocation(location);
 		return new ResponseEntity<Owner>(owner, headers, HttpStatus.CREATED);
 	}
 
