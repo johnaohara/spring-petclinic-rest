@@ -84,7 +84,8 @@ public class JpaVisitRepositoryImpl implements VisitRepository {
 	@Override
     @Transactional()
 	public void delete(Visit visit) throws DataAccessException {
-        this.em.remove(this.em.contains(visit) ? visit : this.em.merge(visit));
+        if ( this.em.contains(visit) )
+            this.em.remove(visit);
 	}
 
 }
