@@ -16,17 +16,15 @@
 
 package org.springframework.samples.petclinic.repository.jpa;
 
-import java.util.Collection;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.repository.SpecialtyRepository;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Collection;
 
 /**
  * @author Vitaliy Fedoriv
@@ -41,20 +39,17 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
     private EntityManager em;
 
 	@Override
-    @Transactional()
 	public Specialty findById(int id) {
 		return this.em.find(Specialty.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-    @Transactional()
 	public Collection<Specialty> findAll() throws DataAccessException {
 		return this.em.createQuery("SELECT s FROM Specialty s").getResultList();
 	}
 
 	@Override
-    @Transactional()
 	public void save(Specialty specialty) throws DataAccessException {
 		if (specialty.getId() == null) {
             this.em.persist(specialty);
@@ -64,7 +59,6 @@ public class JpaSpecialtyRepositoryImpl implements SpecialtyRepository {
 	}
 
 	@Override
-    @Transactional()
 	public void delete(Specialty specialty) throws DataAccessException {
 		this.em.remove(this.em.contains(specialty) ? specialty : this.em.merge(specialty));
 		Integer specId = specialty.getId();

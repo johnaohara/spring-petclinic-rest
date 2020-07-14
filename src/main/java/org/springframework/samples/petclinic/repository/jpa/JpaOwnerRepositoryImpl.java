@@ -15,19 +15,17 @@
  */
 package org.springframework.samples.petclinic.repository.jpa;
 
-import java.util.Collection;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate5.support.OpenSessionInViewFilter;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.Collection;
 
 /**
  * JPA implementation of the {@link OwnerRepository} interface.
@@ -54,7 +52,6 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
      * - Turning on lazy-loading and using {@link OpenSessionInViewFilter}
      */
     @SuppressWarnings("unchecked")
-    @Transactional()
     public Collection<Owner> findByLastName(String lastName) {
         // using 'join fetch' because a single query should load both owners and pets
         // using 'left join fetch' because it might happen that an owner does not have pets yet
@@ -64,7 +61,6 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
     }
 
     @Override
-    @Transactional()
     public Owner findById(int id) {
         // using 'join fetch' because a single query should load both owners and pets
         // using 'left join fetch' because it might happen that an owner does not have pets yet
@@ -75,7 +71,6 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
 
 
     @Override
-    @Transactional()
     public void save(Owner owner) {
         if (owner.getId() == null) {
             this.em.persist(owner);
@@ -87,15 +82,13 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
 
 	@SuppressWarnings("unchecked")
 	@Override
-    @Transactional()
-    public Collection<Owner> findAll() throws DataAccessException {
+	public Collection<Owner> findAll() throws DataAccessException {
 		Query query = this.em.createQuery("SELECT owner FROM Owner owner");
         return query.getResultList();
 	}
 
 	@Override
-    @Transactional()
-    public void delete(Owner owner) throws DataAccessException {
+	public void delete(Owner owner) throws DataAccessException {
 		this.em.remove(this.em.contains(owner) ? owner : this.em.merge(owner));
 	}
 

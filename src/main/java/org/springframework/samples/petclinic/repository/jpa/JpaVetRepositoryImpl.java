@@ -23,7 +23,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.Collection;
 
 /**
@@ -42,22 +41,19 @@ public class JpaVetRepositoryImpl implements VetRepository {
     @PersistenceContext
     private EntityManager em;
 
-
+   
 	@Override
-    @Transactional()
 	public Vet findById(int id) throws DataAccessException {
 		return this.em.find(Vet.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-    @Transactional()
 	public Collection<Vet> findAll() throws DataAccessException {
 		return this.em.createQuery("SELECT vet FROM Vet vet").getResultList();
 	}
 
 	@Override
-    @Transactional
 	public void save(Vet vet) throws DataAccessException {
         if (vet.getId() == null) {
             this.em.persist(vet);
@@ -67,7 +63,6 @@ public class JpaVetRepositoryImpl implements VetRepository {
 	}
 
 	@Override
-    @Transactional
 	public void delete(Vet vet) throws DataAccessException {
 		this.em.remove(this.em.contains(vet) ? vet : this.em.merge(vet));
 	}

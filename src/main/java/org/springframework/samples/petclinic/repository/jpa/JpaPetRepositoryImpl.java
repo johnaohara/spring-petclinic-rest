@@ -15,19 +15,17 @@
  */
 package org.springframework.samples.petclinic.repository.jpa;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * JPA implementation of the {@link PetRepository} interface.
@@ -47,19 +45,16 @@ public class JpaPetRepositoryImpl implements PetRepository {
 
     @Override
     @SuppressWarnings("unchecked")
-    @Transactional()
     public List<PetType> findPetTypes() {
         return this.em.createQuery("SELECT ptype FROM PetType ptype ORDER BY ptype.name").getResultList();
     }
 
     @Override
-    @Transactional()
     public Pet findById(int id) {
         return this.em.find(Pet.class, id);
     }
 
     @Override
-    @Transactional()
     public void save(Pet pet) {
         if (pet.getId() == null) {
             this.em.persist(pet);
@@ -70,13 +65,11 @@ public class JpaPetRepositoryImpl implements PetRepository {
 
 	@SuppressWarnings("unchecked")
 	@Override
-    @Transactional()
 	public Collection<Pet> findAll() throws DataAccessException {
 		return this.em.createQuery("SELECT pet FROM Pet pet").getResultList();
 	}
 
 	@Override
-    @Transactional()
 	public void delete(Pet pet) throws DataAccessException {
 		//this.em.remove(this.em.contains(pet) ? pet : this.em.merge(pet));
 		String petId = pet.getId().toString();
