@@ -22,9 +22,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate5.support.OpenSessionInViewFilter;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Repository;
@@ -39,11 +36,10 @@ import org.springframework.stereotype.Repository;
  * @author Vitaliy Fedoriv
  */
 @Repository
-@Profile("jpa")
 public class JpaOwnerRepositoryImpl implements OwnerRepository {
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
 
     /**
@@ -51,7 +47,7 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
      * we do not need Visits at all and we only need one property from the Pet objects (the 'name' property).
      * There are some ways to improve it such as:
      * - creating a Ligtweight class (example here: https://community.jboss.org/wiki/LightweightClass)
-     * - Turning on lazy-loading and using {@link OpenSessionInViewFilter}
+     * - Turning on lazy-loading
      */
     @SuppressWarnings("unchecked")
     @Transactional()
@@ -88,14 +84,14 @@ public class JpaOwnerRepositoryImpl implements OwnerRepository {
 	@SuppressWarnings("unchecked")
 	@Override
     @Transactional()
-    public Collection<Owner> findAll() throws DataAccessException {
+    public Collection<Owner> findAll()  {
 		Query query = this.em.createQuery("SELECT owner FROM Owner owner");
         return query.getResultList();
 	}
 
 	@Override
     @Transactional()
-    public void delete(Owner owner) throws DataAccessException {
+    public void delete(Owner owner) {
 		this.em.remove(this.em.contains(owner) ? owner : this.em.merge(owner));
 	}
 

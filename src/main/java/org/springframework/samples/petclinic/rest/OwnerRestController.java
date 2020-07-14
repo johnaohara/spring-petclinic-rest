@@ -24,16 +24,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
 
@@ -43,15 +43,11 @@ import java.util.Collection;
  */
 
 @RestController
-@CrossOrigin(exposedHeaders = "errors, content-type")
 @RequestMapping("/api/owners")
 public class OwnerRestController {
 
 	@Autowired
-	private ClinicService clinicService;
-
-	@Autowired
-    UriComponentsBuilder ucBuilder;
+	ClinicService clinicService;
 
 	@PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "/*/lastname/{lastName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -89,10 +85,10 @@ public class OwnerRestController {
 
     @PreAuthorize( "hasRole('OWNER_ADMIN')" )
 	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Owner> addOwner(@RequestBody @Valid Owner owner) {
+	public ResponseEntity<Owner> addOwner(@RequestBody @Valid Owner owner, @Context UriInfo uriInfo) {
 		HttpHeaders headers = new HttpHeaders();
 		this.clinicService.saveOwner(owner);
-		URI location = ucBuilder.path("/api/owners/{id}").buildAndExpand(owner.getId()).toUri();
+        URI location = uriInfo.getAbsolutePathBuilder().path(Long.toString(owner.getId())).build();
 		headers.setLocation(location);
 		return new ResponseEntity<Owner>(owner, headers, HttpStatus.CREATED);
 	}

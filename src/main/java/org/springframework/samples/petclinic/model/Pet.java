@@ -33,7 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.samples.petclinic.rest.JacksonCustomPetDeserializer;
 import org.springframework.samples.petclinic.rest.JacksonCustomPetSerializer;
 
@@ -56,7 +56,7 @@ public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd")
     private Date birthDate;
 
     @ManyToOne

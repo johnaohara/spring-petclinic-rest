@@ -23,8 +23,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.stereotype.Repository;
@@ -41,11 +39,10 @@ import org.springframework.stereotype.Repository;
  * @author Vitaliy Fedoriv
  */
 @Repository
-@Profile("jpa")
 public class JpaVisitRepositoryImpl implements VisitRepository {
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
 
     @Override
@@ -70,20 +67,20 @@ public class JpaVisitRepositoryImpl implements VisitRepository {
 
 	@Override
     @Transactional()
-	public Visit findById(int id) throws DataAccessException {
+	public Visit findById(int id) {
 		return this.em.find(Visit.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
     @Transactional()
-	public Collection<Visit> findAll() throws DataAccessException {
+	public Collection<Visit> findAll() {
         return this.em.createQuery("SELECT v FROM Visit v").getResultList();
 	}
 
 	@Override
     @Transactional()
-	public void delete(Visit visit) throws DataAccessException {
+	public void delete(Visit visit) {
         this.em.remove(this.em.contains(visit) ? visit : this.em.merge(visit));
 	}
 

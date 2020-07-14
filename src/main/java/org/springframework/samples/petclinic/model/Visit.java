@@ -26,7 +26,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import javax.validation.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.rest.JacksonCustomVisitDeserializer;
 import org.springframework.samples.petclinic.rest.JacksonCustomVisitSerializer;
 
@@ -50,7 +49,6 @@ public class Visit extends BaseEntity {
      */
     @Column(name = "visit_date")
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy/MM/dd")
     private Date date;
 

@@ -20,7 +20,10 @@
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <maven.compiler.target>1.8</maven.compiler.target>
 <!--                <quarkus.version>1.0.1.Final</quarkus.version>-->
-        <quarkus.version>999-SNAPSHOT</quarkus.version>
+<!--                <quarkus.version>1.1.0.Final</quarkus.version>-->
+                <quarkus.version>1.6.0.Final</quarkus.version>
+<!--        <quarkus.version>1.6.0.Final</quarkus.version>-->
+
     </properties>
 
     <!-- repository for springfox plugin -->

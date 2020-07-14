@@ -16,21 +16,17 @@
 
 package org.springframework.samples.petclinic.repository.jpa;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
-import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.PetTypeRepository;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Vitaliy Fedoriv
@@ -38,11 +34,10 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-@Profile("jpa")
 public class JpaPetTypeRepositoryImpl implements PetTypeRepository {
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
 	@Override
     @Transactional()
@@ -53,13 +48,13 @@ public class JpaPetTypeRepositoryImpl implements PetTypeRepository {
 	@SuppressWarnings("unchecked")
 	@Override
     @Transactional()
-	public Collection<PetType> findAll() throws DataAccessException {
+	public Collection<PetType> findAll() {
 		return this.em.createQuery("SELECT ptype FROM PetType ptype").getResultList();
 	}
 
 	@Override
     @Transactional()
-	public void save(PetType petType) throws DataAccessException {
+	public void save(PetType petType) {
 		if (petType.getId() == null) {
             this.em.persist(petType);
         } else {
@@ -71,7 +66,7 @@ public class JpaPetTypeRepositoryImpl implements PetTypeRepository {
 	@SuppressWarnings("unchecked")
 	@Override
     @Transactional()
-	public void delete(PetType petType) throws DataAccessException {
+	public void delete(PetType petType) {
 		this.em.remove(this.em.contains(petType) ? petType : this.em.merge(petType));
 		Integer petTypeId = petType.getId();
 
